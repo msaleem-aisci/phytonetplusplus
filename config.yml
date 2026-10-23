@@ -1,0 +1,26 @@
+dataset:
+  ds1_path: "/kaggle/input/datasets/nirmalsankalana/sugarcane-leaf-disease-dataset"
+  ds2_path: "/kaggle/input/datasets/akilesh253/sugarcane-plant-diseases-dataset/Sugarcane_leafs"
+  virtual_dir: "/kaggle/working/combined_sugarcane_dataset"
+  image_size: 1500
+  batch_size: 4
+  num_workers: 4
+  val_split: 0.2
+
+training:
+  epochs: 20
+  lr: 0.00005
+  weight_decay: 0.01
+  accum_steps: 8
+  patience: 8
+
+checkpoint:
+  input_ckpt: "/kaggle/input/datasets/jetminds/swin-t-epoch14/swin_checkpoint.pth"
+  working_ckpt: "/kaggle/working/swin_checkpoint.pth"
+  best_model: "/kaggle/working/swin_best.pth"
+
+inference:
+  image_path: "/kaggle/input/datasets/xpertdl/test-bench/bench/red rot/IMG_20260914_102520.jpg"
+  model_path: "/kaggle/input/datasets/deepbrains/swin-t-20-epochs/swin_best.pth"
+  class_names: ['Healthy', 'Mosaic', 'RedRot', 'Rust', 'YellowLeaf']
+  output_dir: "/kaggle/working/inference_results"

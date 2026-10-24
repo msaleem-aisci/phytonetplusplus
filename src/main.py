@@ -4,7 +4,7 @@ import torch.optim as optim
 
 from core.config_parser import load_config
 from core.dataset import get_dataloaders
-from core.model.swin_t import build_swin_t
+from core.models.swin_t import build_swin_t
 from core.loss import get_loss_function
 from core.trainer import Trainer
 

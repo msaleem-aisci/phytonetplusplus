@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from core.config_parser import load_config
 from core.utils import SquarePad, load_model_weights
-from core.model.swin_t import build_swin_t
+from core.models.swin_t import build_swin_t
 from core.grad import SwinGradCAM
 
 def main():

@@ -1,5 +1,5 @@
 dataset:
-  data_dir: "/kaggle/input/sugarcane-leaf-disease-dataset" # Assumes a single, pre-processed directory
+  data_dir: "/kaggle/working/combined_sugarcane_dataset" # Assumes a single, pre-processed directory
   image_size: 1500
   batch_size: 4
   num_workers: 4

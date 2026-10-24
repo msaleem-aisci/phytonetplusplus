@@ -1,0 +1,24 @@
+dataset:
+  data_dir: "/kaggle/input/sugarcane-leaf-disease-dataset" # Assumes a single, pre-processed directory
+  image_size: 1500
+  batch_size: 4
+  num_workers: 4
+  val_split: 0.2
+
+training:
+  epochs: 20
+  lr: 0.00005
+  weight_decay: 0.01
+  accum_steps: 8
+  patience: 8
+
+checkpoint:
+  input_ckpt: "" # Leave empty if training from scratch
+  working_ckpt: "checkpoints/models/swin_checkpoint.pth"
+  best_model: "checkpoints/models/swin_best.pth"
+
+inference:
+  image_path: "input/IMG_20260914_102520.jpg"
+  model_path: "checkpoints/models/swin_best.pth"
+  output_dir: "output"
+  class_names: ['Healthy', 'Mosaic', 'RedRot', 'Rust', 'YellowLeaf']

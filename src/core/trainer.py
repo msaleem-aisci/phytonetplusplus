@@ -1,8 +1,8 @@
 import os
 import torch
 import torch.nn as nn
-from src.code.utils import save_checkpoint
-from src.code.config_parser import TrainingConfig, CheckpointConfig
+from src.core.utils import save_checkpoint
+from src.core.config_parser import TrainingConfig, CheckpointConfig
 
 class Trainer:
     def __init__(self, model, dataloaders, criterion, optimizer, device, train_cfg: TrainingConfig, ckpt_cfg: CheckpointConfig):

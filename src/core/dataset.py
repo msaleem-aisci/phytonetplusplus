@@ -1,8 +1,8 @@
 import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split, Dataset
-from src.code.utils import SquarePad
-from src.code.config_parser import DatasetConfig
+from src.core.utils import SquarePad
+from src.core.config_parser import DatasetConfig
 
 class DatasetWrapper(Dataset):
     def __init__(self, subset, transform=None):

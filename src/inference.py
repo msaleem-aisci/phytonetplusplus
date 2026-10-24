@@ -7,10 +7,10 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 
-from code.config_parser import load_config
-from code.utils import SquarePad, load_model_weights
-from code.model.swin_t import build_swin_t
-from code.grad import SwinGradCAM
+from core.config_parser import load_config
+from core.utils import SquarePad, load_model_weights
+from core.model.swin_t import build_swin_t
+from core.grad import SwinGradCAM
 
 def main():
     config = load_config('config.yml')

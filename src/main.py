@@ -8,7 +8,7 @@ _PROJECT_ROOT = os.path.abspath(os.path.join(_THIS_DIR, ".."))  # Only one level
 if _PROJECT_ROOT not in sys.path:
     sys.path.insert(0, _PROJECT_ROOT)
     
-    
+
 
 import argparse
 import torch
@@ -49,6 +49,32 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    args = parse_args()
+    
+    # Print all parsed arguments manually
+    print("-" * 40)
+    print("Parsed Configuration Arguments:")
+    print(f"  data_dir: {args.data_dir}")
+    print(f"  num_classes: {args.num_classes}")
+    print(f"  val_split: {args.val_split}")
+    print(f"  total_epochs: {args.total_epochs}")
+    print(f"  learning_rate: {args.learning_rate}")
+    print(f"  patience: {args.patience}")
+    print(f"  physical_batch: {args.physical_batch}")
+    print(f"  accumulation_steps: {args.accumulation_steps}")
+    print(f"  input_checkpoint_path: {args.input_checkpoint_path}")
+    print(f"  input_csv_path: {args.input_csv_path}")
+    print(f"  working_checkpoint_path: {args.working_checkpoint_path}")
+    print(f"  best_model_path: {args.best_model_path}")
+    print(f"  working_csv_path: {args.working_csv_path}")
+    print("-" * 40)
+    
+    print("\nExecution stopped after printing arguments as requested.")
+
+if __name__ == '__main__':
+    main()
+
+def maina():
     args = parse_args()
     
     # Dynamically build the dataclasses so trainer.py does not need to change
@@ -110,5 +136,5 @@ def main():
     )
     trainer.train()
 
-if __name__ == '__main__':
-    main()
+
+

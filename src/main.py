@@ -18,6 +18,8 @@ from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.utils import test_fun
 from src.config_parser import load_config
 from src.dataset import get_dataloaders
+from src.model.resnet import build_resnet
+from src.losses.cross_entropy import get_loss_function
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")
@@ -96,6 +98,17 @@ def main():
 
     # 3. Initialize components using the fully merged config object
     dataloaders, num_classes_ds = get_dataloaders(config.dataset)
+    target_classes = args.num_classes if args.num_classes else 5
+    assert target_classes == num_classes_ds, f"CLI classes ({target_classes}) != Dataset classes ({num_classes_ds})"
+    
+    # 4. Initialize Model, Loss, and Optimizer
+    model = build_resnet(target_classes)
+    criterion = get_loss_function()
+    
+    # Notice we use config.training.lr and config.training.weight_decay directly here
+    optimizer = optim.Adam(model.parameters(), lr=config.training.lr, weight_decay=config.training.weight_decay)
+
+    print("\nModel and Loss successfully initialized from modular files.")
   
 
 if __name__ == '__main__':

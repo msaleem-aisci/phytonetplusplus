@@ -1,24 +1,30 @@
+base_paths:
+  working_dir: "/kaggle/working"
+  checkpoint_dir: "checkpoints"
+  output_dir: "output"
+
 dataset:
-  data_dir: "/kaggle/working/combined_sugarcane_dataset" # Assumes a single, pre-processed directory
+  data_dir: "/kaggle/working/combined_sugarcane_dataset" 
   image_size: 1500
-  batch_size: 4
+  batch_size: 16
   num_workers: 4
   val_split: 0.2
 
 training:
-  epochs: 20
-  lr: 0.00005
+  epochs: 18
+  lr: 0.0001
   weight_decay: 0.01
-  accum_steps: 8
-  patience: 8
+  accum_steps: 2
+  patience: 5
 
 checkpoint:
-  input_ckpt: "" # Leave empty if training from scratch
-  working_ckpt: "checkpoints/models/swin_checkpoint.pth"
-  best_model: "checkpoints/models/swin_best.pth"
+  input_ckpt: "none" 
+  input_csv: "none"  
+  working_ckpt: "models/model_checkpoint.pth" # Parser will prepend checkpoint_dir
+  best_model: "models/model_best.pth"
+  working_csv: "logs/model_training_log.csv"
 
 inference:
-  image_path: "input/IMG_20260914_102520.jpg"
-  model_path: "checkpoints/models/swin_best.pth"
-  output_dir: "output"
+  image_path: "data/IMG_20260914_102520.jpg" 
+  model_path: "models/model_best.pth"         # Parser will prepend checkpoint_dir
   class_names: ['Healthy', 'Mosaic', 'RedRot', 'Rust', 'YellowLeaf']

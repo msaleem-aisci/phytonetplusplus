@@ -18,7 +18,7 @@ from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.utils import test_fun
 from src.config_parser import load_config
 from src.dataset import get_dataloaders
-from src.model.resnet import build_resnet
+from src.models.resnet import build_resnet
 from src.losses.cross_entropy import get_loss_function
 
 def parse_args():

@@ -1,14 +1,26 @@
+
+
 import os
+import sys
+
+# Resolve the project root dynamically to allow absolute imports
+
+
 import argparse
 import torch
 import torch.optim as optim
 
-# Updated imports based on the finalized src/ structure
 from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.dataset import get_dataloaders
-from src.model.resnet import build_resnet  # Assuming resnet based on your checkpoint names
+from src.model.resnet import build_resnet 
 from src.losses.cross_entropy import get_loss_function
 from src.trainer import Trainer
+
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.abspath(os.path.join(_THIS_DIR, ".."))  # Only one level up
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+    
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")

@@ -17,6 +17,7 @@ import torch.optim as optim
 from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.utils import test_fun
 from src.config_parser import load_config
+from src.dataset import get_dataloaders
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")

@@ -15,10 +15,7 @@ import torch
 import torch.optim as optim
 
 from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
-from src.dataset import get_dataloaders
-from src.model.resnet import build_resnet 
-from src.losses.cross_entropy import get_loss_function
-from src.trainer import Trainer
+
 
 
 

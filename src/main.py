@@ -15,7 +15,7 @@ import torch
 import torch.optim as optim
 
 from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
-
+from src.utils import test_fun
 
 
 
@@ -47,26 +47,8 @@ def parse_args():
 
 def main():
     args = parse_args()
-    
-    # Print all parsed arguments manually
-    print("-" * 40)
-    print("Parsed Configuration Arguments:")
-    print(f"  data_dir: {args.data_dir}")
-    print(f"  num_classes: {args.num_classes}")
-    print(f"  val_split: {args.val_split}")
-    print(f"  total_epochs: {args.total_epochs}")
-    print(f"  learning_rate: {args.learning_rate}")
-    print(f"  patience: {args.patience}")
-    print(f"  physical_batch: {args.physical_batch}")
-    print(f"  accumulation_steps: {args.accumulation_steps}")
-    print(f"  input_checkpoint_path: {args.input_checkpoint_path}")
-    print(f"  input_csv_path: {args.input_csv_path}")
-    print(f"  working_checkpoint_path: {args.working_checkpoint_path}")
-    print(f"  best_model_path: {args.best_model_path}")
-    print(f"  working_csv_path: {args.working_csv_path}")
-    print("-" * 40)
-    
-    print("\nExecution stopped after printing arguments as requested.")
+
+    print(test_fun())
 
 if __name__ == '__main__':
     main()

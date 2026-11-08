@@ -70,3 +70,7 @@ class SwinGradCAM:
             heatmap /= heatmap_max
             
         return heatmap.cpu().numpy()
+
+
+def test_fun():
+    return "Bhai this is test."

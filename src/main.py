@@ -18,42 +18,72 @@ from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.utils import test_fun
 from src.config_parser import load_config
 
-
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")
     
+    # Set defaults to None so YAML takes precedence. CLI overrides only if explicitly passed.
     # Dataset Arguments
-    parser.add_argument('--data_dir', type=str, default='/kaggle/working/combined_sugarcane_dataset')
-    parser.add_argument('--num_classes', type=int, default=5)
-    parser.add_argument('--val_split', type=float, default=0.2)
+    parser.add_argument('--data_dir', type=str, default=None)
+    parser.add_argument('--num_classes', type=int, default=None)
+    parser.add_argument('--val_split', type=float, default=None)
     
     # Training Arguments
-    parser.add_argument('--total_epochs', type=int, default=18)
-    parser.add_argument('--learning_rate', type=float, default=1e-4)
-    parser.add_argument('--patience', type=int, default=5)
+    parser.add_argument('--total_epochs', type=int, default=None)
+    parser.add_argument('--learning_rate', type=float, default=None)
+    parser.add_argument('--patience', type=int, default=None)
     
     # Memory Management
-    parser.add_argument('--physical_batch', type=int, default=16)
-    parser.add_argument('--accumulation_steps', type=int, default=2)
+    parser.add_argument('--physical_batch', type=int, default=None)
+    parser.add_argument('--accumulation_steps', type=int, default=None)
     
     # Checkpoint & CSV Paths
-    parser.add_argument('--input_checkpoint_path', type=str, default='none')
-    parser.add_argument('--input_csv_path', type=str, default='none')
-    parser.add_argument('--working_checkpoint_path', type=str, default='/kaggle/working/resnet18_checkpoint.pth')
-    parser.add_argument('--best_model_path', type=str, default='/kaggle/working/resnet18_best.pth')
-    parser.add_argument('--working_csv_path', type=str, default='/kaggle/working/restnet_training_log.csv')
+    parser.add_argument('--input_checkpoint_path', type=str, default=None)
+    parser.add_argument('--input_csv_path', type=str, default=None)
+    parser.add_argument('--working_checkpoint_path', type=str, default=None)
+    parser.add_argument('--best_model_path', type=str, default=None)
+    parser.add_argument('--working_csv_path', type=str, default=None)
 
     return parser.parse_args()
 
 def main():
-    # You can still parse CLI args if you want to override YAML later
     args = parse_args()
     
-    # Load the configuration from the YAML file
+    # 1. Load the base configuration from the YAML file
     config = load_config('config.yml')
     
+    # 2. Override YAML defaults with explicitly provided CLI arguments
+    if args.data_dir is not None:
+        config.dataset.data_dir = args.data_dir
+    if args.val_split is not None:
+        config.dataset.val_split = args.val_split
+        
+    if args.total_epochs is not None:
+        config.training.epochs = args.total_epochs
+    if args.learning_rate is not None:
+        config.training.lr = args.learning_rate
+    if args.patience is not None:
+        config.training.patience = args.patience
+        
+    if args.physical_batch is not None:
+        config.dataset.batch_size = args.physical_batch
+    if args.accumulation_steps is not None:
+        config.training.accum_steps = args.accumulation_steps
+
+    if args.input_checkpoint_path is not None:
+        config.checkpoint.input_ckpt = "" if args.input_checkpoint_path.lower() == 'none' else args.input_checkpoint_path
+    if args.input_csv_path is not None:
+        config.checkpoint.input_csv = "" if args.input_csv_path.lower() == 'none' else args.input_csv_path
+        
+    if args.working_checkpoint_path is not None:
+        config.checkpoint.working_ckpt = args.working_checkpoint_path
+    if args.best_model_path is not None:
+        config.checkpoint.best_model = args.best_model_path
+    if args.working_csv_path is not None:
+        config.checkpoint.working_csv = args.working_csv_path
+
+    # 3. Print Final Merged Configuration
     print("-" * 50)
-    print("Loaded Configuration from config.yml:")
+    print("Final Configuration (YAML with CLI Overrides):")
     print("-" * 50)
     
     print("\n[Base Paths]")
@@ -75,7 +105,7 @@ def main():
     print(f"  accumulation_steps: {config.training.accum_steps}")
     print(f"  patience: {config.training.patience}")
     
-    print("\n[Checkpoints - Dynamically Assembled Paths]")
+    print("\n[Checkpoints]")
     print(f"  input_ckpt: {config.checkpoint.input_ckpt}")
     print(f"  input_csv: {config.checkpoint.input_csv}")
     print(f"  working_ckpt: {config.checkpoint.working_ckpt}")
@@ -88,7 +118,7 @@ def main():
     print(f"  output_dir: {config.inference.output_dir}")
     print("-" * 50)
     
-    print("\nExecution stopped after printing YAML arguments as requested.")
+    print("\nExecution stopped after printing Final arguments as requested.")
 
 if __name__ == '__main__':
     main()

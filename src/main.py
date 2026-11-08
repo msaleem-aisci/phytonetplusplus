@@ -3,8 +3,12 @@
 import os
 import sys
 
-# Resolve the project root dynamically to allow absolute imports
-
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.abspath(os.path.join(_THIS_DIR, ".."))  # Only one level up
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+    
+    
 
 import argparse
 import torch
@@ -16,11 +20,7 @@ from src.model.resnet import build_resnet
 from src.losses.cross_entropy import get_loss_function
 from src.trainer import Trainer
 
-_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-_PROJECT_ROOT = os.path.abspath(os.path.join(_THIS_DIR, ".."))  # Only one level up
-if _PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, _PROJECT_ROOT)
-    
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")

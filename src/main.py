@@ -16,7 +16,7 @@ import torch.optim as optim
 
 from src.config_parser import DatasetConfig, TrainingConfig, CheckpointConfig
 from src.utils import test_fun
-
+from src.config_parser import load_config
 
 
 def parse_args():
@@ -46,9 +46,49 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    # You can still parse CLI args if you want to override YAML later
     args = parse_args()
-
-    print(test_fun())
+    
+    # Load the configuration from the YAML file
+    config = load_config('config.yml')
+    
+    print("-" * 50)
+    print("Loaded Configuration from config.yml:")
+    print("-" * 50)
+    
+    print("\n[Base Paths]")
+    print(f"  working_dir: {config.base_paths.working_dir}")
+    print(f"  checkpoint_dir: {config.base_paths.checkpoint_dir}")
+    print(f"  output_dir: {config.base_paths.output_dir}")
+    
+    print("\n[Dataset]")
+    print(f"  data_dir: {config.dataset.data_dir}")
+    print(f"  image_size: {config.dataset.image_size}")
+    print(f"  batch_size: {config.dataset.batch_size}")
+    print(f"  num_workers: {config.dataset.num_workers}")
+    print(f"  val_split: {config.dataset.val_split}")
+    
+    print("\n[Training]")
+    print(f"  epochs: {config.training.epochs}")
+    print(f"  learning_rate: {config.training.lr}")
+    print(f"  weight_decay: {config.training.weight_decay}")
+    print(f"  accumulation_steps: {config.training.accum_steps}")
+    print(f"  patience: {config.training.patience}")
+    
+    print("\n[Checkpoints - Dynamically Assembled Paths]")
+    print(f"  input_ckpt: {config.checkpoint.input_ckpt}")
+    print(f"  input_csv: {config.checkpoint.input_csv}")
+    print(f"  working_ckpt: {config.checkpoint.working_ckpt}")
+    print(f"  best_model: {config.checkpoint.best_model}")
+    print(f"  working_csv: {config.checkpoint.working_csv}")
+    
+    print("\n[Inference]")
+    print(f"  image_path: {config.inference.image_path}")
+    print(f"  model_path: {config.inference.model_path}")
+    print(f"  output_dir: {config.inference.output_dir}")
+    print("-" * 50)
+    
+    print("\nExecution stopped after printing YAML arguments as requested.")
 
 if __name__ == '__main__':
     main()

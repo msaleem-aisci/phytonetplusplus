@@ -1,10 +1,6 @@
-Notice that the README draft you pasted reverted to the previous file structure, listing `loss.py` and `grad.py` instead of the `losses/` and `grad_cam/` directories we just established.
 
-To maintain consistency with your actual repository layout, I have corrected the structure and file descriptions in this finalized README. I also added the necessary setup, training, and inference instructions to make this a complete, repository-ready document.
 
-Here is the complete text for your `README.md`:
 
-```markdown
 # PhytoNet++
 
 ## Project Overview

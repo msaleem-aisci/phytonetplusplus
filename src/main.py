@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument('--total_epochs', type=int, default=None)
     parser.add_argument('--learning_rate', type=float, default=None)
     parser.add_argument('--patience', type=int, default=None)
+    parser.add_argument('--start_epoch', type=int, default=None)
     
     # Memory Management
     parser.add_argument('--physical_batch', type=int, default=None)
@@ -63,6 +64,8 @@ def main():
         config.training.lr = args.learning_rate
     if args.patience is not None:
         config.training.patience = args.patience
+    if args.start_epoch is not None: 
+        config.training.start_epoch = args.start_epoch
         
     if args.physical_batch is not None:
         config.dataset.batch_size = args.physical_batch
@@ -80,45 +83,19 @@ def main():
         config.checkpoint.best_model = args.best_model_path
     if args.working_csv_path is not None:
         config.checkpoint.working_csv = args.working_csv_path
+    
 
-    # 3. Print Final Merged Configuration
-    print("-" * 50)
-    print("Final Configuration (YAML with CLI Overrides):")
-    print("-" * 50)
-    
-    print("\n[Base Paths]")
-    print(f"  working_dir: {config.base_paths.working_dir}")
-    print(f"  checkpoint_dir: {config.base_paths.checkpoint_dir}")
-    print(f"  output_dir: {config.base_paths.output_dir}")
-    
-    print("\n[Dataset]")
-    print(f"  data_dir: {config.dataset.data_dir}")
-    print(f"  image_size: {config.dataset.image_size}")
-    print(f"  batch_size: {config.dataset.batch_size}")
-    print(f"  num_workers: {config.dataset.num_workers}")
-    print(f"  val_split: {config.dataset.val_split}")
-    
-    print("\n[Training]")
-    print(f"  epochs: {config.training.epochs}")
-    print(f"  learning_rate: {config.training.lr}")
-    print(f"  weight_decay: {config.training.weight_decay}")
-    print(f"  accumulation_steps: {config.training.accum_steps}")
-    print(f"  patience: {config.training.patience}")
-    
-    print("\n[Checkpoints]")
-    print(f"  input_ckpt: {config.checkpoint.input_ckpt}")
-    print(f"  input_csv: {config.checkpoint.input_csv}")
-    print(f"  working_ckpt: {config.checkpoint.working_ckpt}")
-    print(f"  best_model: {config.checkpoint.best_model}")
-    print(f"  working_csv: {config.checkpoint.working_csv}")
-    
-    print("\n[Inference]")
-    print(f"  image_path: {config.inference.image_path}")
-    print(f"  model_path: {config.inference.model_path}")
-    print(f"  output_dir: {config.inference.output_dir}")
-    print("-" * 50)
-    
-    print("\nExecution stopped after printing Final arguments as requested.")
+
+    os.makedirs(os.path.dirname(config.checkpoint.working_ckpt), exist_ok=True)
+    if os.path.dirname(config.checkpoint.working_csv):
+        os.makedirs(os.path.dirname(config.checkpoint.working_csv), exist_ok=True)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Device: {device} | Target Epochs: {config.training.epochs} | Effective Batch: {config.dataset.batch_size * config.training.accum_steps}")
+
+    # 3. Initialize components using the fully merged config object
+    dataloaders, num_classes_ds = get_dataloaders(config.dataset)
+  
 
 if __name__ == '__main__':
     main()

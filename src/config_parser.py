@@ -23,6 +23,7 @@ class DatasetConfig:
 
 @dataclass
 class TrainingConfig:
+    start_epoch: int
     epochs: int
     lr: float
     weight_decay: float

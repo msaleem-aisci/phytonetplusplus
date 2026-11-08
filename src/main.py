@@ -20,6 +20,8 @@ from src.config_parser import load_config
 from src.dataset import get_dataloaders
 from src.models.resnet import build_resnet
 from src.losses.cross_entropy import get_loss_function
+from src.trainer import Trainer
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="PhytoNet++ Training Pipeline")
@@ -109,72 +111,20 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=config.training.lr, weight_decay=config.training.weight_decay)
 
     print("\nModel and Loss successfully initialized from modular files.")
-  
 
-if __name__ == '__main__':
-    main()
-
-def maina():
-    args = parse_args()
-    
-    # Dynamically build the dataclasses so trainer.py does not need to change
-    dataset_cfg = DatasetConfig(
-        data_dir=args.data_dir,
-        image_size=1500, 
-        batch_size=args.physical_batch,
-        num_workers=4,
-        val_split=args.val_split
-    )
-    
-    training_cfg = TrainingConfig(
-        epochs=args.total_epochs,
-        lr=args.learning_rate,
-        weight_decay=0.01, 
-        accum_steps=args.accumulation_steps,
-        patience=args.patience
-    )
-    
-    # Handle the 'none' string from CLI
-    input_ckpt = "" if args.input_checkpoint_path.lower() == 'none' else args.input_checkpoint_path
-    input_csv = "" if args.input_csv_path.lower() == 'none' else args.input_csv_path
-
-    checkpoint_cfg = CheckpointConfig(
-        input_ckpt=input_ckpt,
-        working_ckpt=args.working_checkpoint_path,
-        best_model=args.best_model_path,
-        input_csv=input_csv,
-        working_csv=args.working_csv_path
-    )
-
-    # Ensure output directories exist based on provided Kaggle paths
-    os.makedirs(os.path.dirname(args.working_checkpoint_path), exist_ok=True)
-    if os.path.dirname(args.working_csv_path):
-        os.makedirs(os.path.dirname(args.working_csv_path), exist_ok=True)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Device: {device} | Target Epochs: {training_cfg.epochs} | Effective Batch Size: {dataset_cfg.batch_size * training_cfg.accum_steps}")
-
-    # Initialize components
-    dataloaders, num_classes_ds = get_dataloaders(dataset_cfg)
-    
-    # Enforce class count match
-    assert args.num_classes == num_classes_ds, f"CLI classes ({args.num_classes}) != Dataset classes ({num_classes_ds})"
-    
-    model = build_resnet(args.num_classes)
-    criterion = get_loss_function()
-    optimizer = optim.AdamW(model.parameters(), lr=training_cfg.lr, weight_decay=training_cfg.weight_decay)
-
-    # Run Engine
     trainer = Trainer(
         model=model, 
         dataloaders=dataloaders, 
         criterion=criterion, 
         optimizer=optimizer, 
         device=device, 
-        train_cfg=training_cfg, 
-        ckpt_cfg=checkpoint_cfg
+        train_cfg=config.training, 
+        ckpt_cfg=config.checkpoint
     )
     trainer.train()
+  
 
+if __name__ == '__main__':
+    main()
 
 

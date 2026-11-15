@@ -28,9 +28,9 @@ def parse_args():
     
     # Set defaults to None so YAML takes precedence. CLI overrides only if explicitly passed.
     # Dataset Arguments
-    parser.add_argument('--data_dir', type=str, default=None)
+    parser.add_argument('--train_dir', type=str, default=None)
+    parser.add_argument('--val_dir', type=str, default=None)
     parser.add_argument('--num_classes', type=int, default=None)
-    parser.add_argument('--val_split', type=float, default=None)
     
     # Training Arguments
     parser.add_argument('--total_epochs', type=int, default=None)
@@ -58,10 +58,11 @@ def main():
     config = load_config('config.yml')
     
     # 2. Override YAML defaults with explicitly provided CLI arguments
-    if args.data_dir is not None:
-        config.dataset.data_dir = args.data_dir
-    if args.val_split is not None:
-        config.dataset.val_split = args.val_split
+    if args.train_dir is not None:
+        config.dataset.train_dir = args.train_dir
+        
+    if args.val_dir is not None:
+        config.dataset.val = args.val_dir
         
     if args.total_epochs is not None:
         config.training.epochs = args.total_epochs

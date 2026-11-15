@@ -15,11 +15,12 @@ class BasePathsConfig:
 
 @dataclass
 class DatasetConfig:
-    data_dir: str
+    train_dir: str
+    val_dir: str
     image_size: int
     batch_size: int
     num_workers: int
-    val_split: float
+
 
 @dataclass
 class TrainingConfig:

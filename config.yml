@@ -4,11 +4,12 @@ base_paths:
   output_dir: "output"
 
 dataset:
-  data_dir: "/kaggle/working/combined_sugarcane_dataset" 
+  train_dir: "/kaggle/working/combined_sugarcane_dataset" 
+  val_dir: "/kaggle/working/combined_sugarcane_dataset" 
   image_size: 1500
   batch_size: 16
   num_workers: 4
-  val_split: 0.2
+
 
 training:
   start_epoch: 0
